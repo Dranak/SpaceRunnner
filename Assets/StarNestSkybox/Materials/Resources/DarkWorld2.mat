@@ -21,6 +21,7 @@ Material:
     m_TexEnvs: []
     m_Floats:
     - _Brightness: -3.9
+    - _CLAMPOUT: 0
     - _CamScroll: 55
     - _Darkmatter: 179.6
     - _Distfading: -70
@@ -32,7 +33,7 @@ Material:
     - _Volsteps: 8
     m_Colors:
     - _Center: {r: -0.1, g: 0.1, b: -0.3, a: -3000}
-    - _Color: {r: 0.25627172, g: 0.17511892, b: 0.5808823, a: 1}
+    - _Color: {r: 0.07510534, g: 0, b: 0.38679248, a: 1}
     - _Rotation: {r: 0, g: 3, b: 0, a: 0.01}
     - _Scroll: {r: 0.1, g: 0.1, b: -0.3, a: 0}
   m_BuildTextureStacks: []
