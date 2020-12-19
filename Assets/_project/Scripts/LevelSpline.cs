@@ -1,4 +1,5 @@
 ﻿using SplineMesh;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -47,18 +48,14 @@ public class LevelSpline : MonoBehaviour
     public void LoadBlock()
     {
 
-        string randomBlockName = ListBlocks[Random.Range(0, ListBlocks.Count)].Name;
+        string randomBlockName = ListBlocks[UnityEngine.Random.Range(0, ListBlocks.Count)].Name;
         SplinePipe loadedBlock = PoolersBlocks[randomBlockName].GetObject().GetComponent<SplinePipe>();
 
         loadedBlock.transform.parent = transform;
         if (LoadedBlock.Count > 0)
         {
             loadedBlock.transform.position = LoadedBlock.ToArray()[LoadedBlock.Count - 1].BorderEnd.transform.position+ Vector3.forward * 35;
-           // loadedBlock.Offset = LoadedBlock.ToArray()[LoadedBlock.Count - 1].BorderEnd.transform.position+Vector3.forward*10;
-            loadedBlock.SetCurve(AllCurves[Random.Range(0, AllCurves.Count)]);
-
-           
-            //loadedBlock.UpdateLastPoint(LoadedBlock.ToArray()[LoadedBlock.Count - 1].Points.Last());
+            loadedBlock.SetCurve(AllCurves[UnityEngine.Random.Range(0, AllCurves.Count)]);
         }
         else
         {
@@ -71,19 +68,18 @@ public class LevelSpline : MonoBehaviour
         //loadedBlock.PipeMeshGenerator.pipeMaterial = _selectedMaterial;
         loadedBlock.FillVolume();
         LoadedBlock.Enqueue(loadedBlock);
+        AddPointsBlock(loadedBlock.Points);
 
     }
 
-    public IEnumerator CoroLoadBlock()
+    private void AddPointsBlock(List<SplineNode> nodes)
     {
 
-        LoadBlock();
-        yield return null;
+        foreach (SplineNode node in nodes)
+        {
+            Spline.AddNode(node);
+        }
     }
-
-
-
-
 
     public void StartSpawnBlock()
     {
@@ -92,14 +88,10 @@ public class LevelSpline : MonoBehaviour
         {
             LoadBlock();
         }
-        foreach (SplinePipe pipe in LoadedBlock.ToList())
-        {
-            foreach (SplineNode node in pipe.Points)
-            {
-                Spline.AddNode(node);
-            }
-
-        }
+        //foreach (SplinePipe pipe in LoadedBlock.ToList())
+        //{
+        //    AddPointsBlock(pipe.Points);
+        //}
         SplineMesh.CreateMeshes();
         //LoadedBlock.Peek().FillVolume();
 
@@ -108,7 +100,7 @@ public class LevelSpline : MonoBehaviour
 
     public Material SelectMaterial()
     {
-        int randomIndexMaterials = Random.Range(0, Materials.Count);
+        int randomIndexMaterials = UnityEngine.Random.Range(0, Materials.Count);
 
         return Materials[randomIndexMaterials];
 

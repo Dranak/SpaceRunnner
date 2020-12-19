@@ -12,17 +12,13 @@ public class SpaceShipController : MonoBehaviour
     public event Action OnDeath;
     public event Action NextLevel;
 
-    public int MinFov;
-    public int MaxFov;
-    private int _fov;
+   
 
     public float MaxEnergy;
     private float _actualEnergy = 0;
 
     public Vector2 SpeedXY;
-    public float MinForwardSpeed;
-    public float _actualForwardSpeed = 0f;
-    public float MaxForwardSpeed;
+
 
     Rigidbody _rigidbody = null;
     Vector3 ScreenPos;
@@ -51,10 +47,7 @@ public class SpaceShipController : MonoBehaviour
 
     private void Start()
     {
-        _fov = MinFov;
-        Camera.main.fieldOfView = _fov;
-        _actualForwardSpeed = MinForwardSpeed;
-        _pointsToFollow = new Queue<Vector3>();
+   
     }
 
     void Update()
@@ -64,15 +57,7 @@ public class SpaceShipController : MonoBehaviour
             _deltaY = Input.GetAxis("Vertical");
             _deltaX = Input.GetAxis("Horizontal");
 
-            if (_pointsToFollow.Count == 0)
-            {
-                foreach (SplineNode point in LevelSpline.Instance?.ActualBlock.Points)
-                {
-                 
-                    _pointsToFollow.Enqueue(point.Position);
-                }
-
-            }
+           
 
         }
 
@@ -95,25 +80,15 @@ public class SpaceShipController : MonoBehaviour
         {
             appliedForce.x = _deltaX * SpeedXY.x;
             appliedForce.y = _deltaY * SpeedXY.y;
-            appliedForce.z = _actualForwardSpeed;
+            appliedForce.z = 0;
 
-            appliedAngularForce.x += rotationMax * -_deltaY;
+            appliedAngularForce.x = rotationMax * -_deltaY;
             appliedAngularForce.y = 0;
-            appliedAngularForce.z += rotationMax * -_deltaX;
+            appliedAngularForce.z = rotationMax * -_deltaX;
 
-            //float angle = 0f;
-            if (_pointsToFollow.Count > 0  )
-            {
-                if(Vector3.Distance(_rigidbody.position, _pointFollowing) <= 0 )
-                {
-                    _pointFollowing = _pointsToFollow.Dequeue();
-                    _rigidbody.rotation = Quaternion.Euler(0,0,Vector3.Angle(_pointFollowing, Vector3.forward));// Quaternion.LookRotation(_pointFollowing-transform.position);
-                }
-          
-
-            }
+           
             _rigidbody.velocity = appliedForce;
-           // _rigidbody.MovePosition(_rigidbody.position+transform.forward * _actualForwardSpeed*Time.fixedDeltaTime);
+          
 
             _rigidbody.rotation = Quaternion.Euler(rotationMax * -_deltaY, 0, rotationMax * -_deltaX);
 
@@ -152,8 +127,13 @@ public class SpaceShipController : MonoBehaviour
                 //}
             }
             Debug.Log("ratio2 " + ratio);
-            GameManager.Instance.Vcam.m_Lens.FieldOfView = Mathf.Lerp(MinFov, MaxFov, _actualEnergy);
-            _actualForwardSpeed = Mathf.Lerp(MinForwardSpeed, MaxForwardSpeed, _actualEnergy);
+            FollowSpline followSpline = GetComponentInParent<FollowSpline>();
+            if(followSpline)
+            {
+                GameManager.Instance.Vcam.m_Lens.FieldOfView = Mathf.Lerp(followSpline.MinFov, followSpline.MaxFov, _actualEnergy);
+                followSpline._actualForwardSpeed = Mathf.Lerp(followSpline.MinForwardSpeed, followSpline.MinForwardSpeed, _actualEnergy);
+            }
+          
             OnSpeedUp.Invoke(_actualEnergy);
         }
     }

@@ -68,7 +68,7 @@ Material:
     - _Formuparam: 465.2
     - _Glossiness: 0.5
     - _HueShift: 0.54
-    - _Iterations: 15
+    - _Iterations: 16
     - _Metallic: 0
     - _Mode: 0
     - _OcclusionStrength: 1
@@ -79,11 +79,11 @@ Material:
     - _StepSize: 254.6
     - _Tile: 1194.6
     - _UVSec: 0
-    - _Volsteps: 8
+    - _Volsteps: 10.5
     - _ZWrite: 1
     m_Colors:
     - _Center: {r: 1, g: 0.63, b: 0.8, a: 0}
-    - _Color: {r: 0.38131276, g: 0.8308824, b: 0.23826772, a: 1}
+    - _Color: {r: 0.2967757, g: 0.33962262, b: 0, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _Rotation: {r: 0, g: 0, b: 0, a: 0.01}
     - _Scroll: {r: 0.1, g: 0.1, b: -0.3, a: 0}
